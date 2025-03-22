@@ -2,9 +2,11 @@
 #include <thread>
 #include <chrono>
 #include "ApiClient.h"
+#include "Cache.h"
 
 int main() {
     ApiClient client;
+    Cache<std::string, std::string> cache;
 
     while (true) {
         std::string result = client.fetchLiveScores();
