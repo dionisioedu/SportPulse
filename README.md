@@ -299,7 +299,7 @@ This project is licensed under the MIT License – see the LICENSE file for deta
 # Contact
 For inquiries, collaboration, or further information, please reach out:
 
-YouTube Channel: [https://www.youtube.com/@dionisiodev]  
-Twitter: [https://www.x.com/dionisiodev]  
+YouTube Channel: [Dionisio Developer](https://www.youtube.com/@dionisiodev)  
+Twitter: [@dionisiodev](https://www.x.com/dionisiodev)  
 Email: ceduardodfernandes@gmail.com  
-GitHub: @dionisioedu  
+GitHub: [@dionisioedu](https://github.com/dionisioedu)  
