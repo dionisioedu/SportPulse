@@ -25,7 +25,11 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(SportPulseTests
-        tests/test_main.cpp)
+        tests/test_main.cpp
+        tests/test_api.cpp
+        tests/test_cache.cpp
+        src/ApiClient.cpp
+        src/DataProcessor.cpp)
 target_link_libraries(SportPulseTests gtest_main curl)
 
 include(GoogleTest)
