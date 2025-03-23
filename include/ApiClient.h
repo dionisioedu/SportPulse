@@ -8,6 +8,7 @@ class ApiClient {
 public:
     std::string fetchLiveScores();
     std::string getAllSports();
+    std::string getAllLeagues();
 };
 
 #endif // API_CLIENT_H

@@ -11,7 +11,8 @@ add_executable(SportPulse
         src/main.cpp
         src/ApiClient.cpp
         src/DataProcessor.cpp
-        src/SportService.cpp)
+        src/SportService.cpp
+        src/LeagueService.cpp)
 
 target_link_libraries(SportPulse curl)
 
@@ -30,9 +31,11 @@ add_executable(SportPulseTests
         tests/test_api.cpp
         tests/test_cache.cpp
         tests/test_sportservice.cpp
+        tests/test_leagueservice.cpp
         src/ApiClient.cpp
         src/DataProcessor.cpp
-        src/SportService.cpp)
+        src/SportService.cpp
+        src/LeagueService.cpp)
 target_link_libraries(SportPulseTests gtest_main curl)
 
 include(GoogleTest)
