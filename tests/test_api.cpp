@@ -7,3 +7,10 @@ TEST(ApiClientTest, FetchLiveScoresReturnsData) {
     // Ensure that the result is not empty. Adjust as needed based on expected response.
     EXPECT_FALSE(result.empty());
 }
+
+TEST(ApiClientTest, GetAllSportsReturnsData) {
+    ApiClient client;
+    std::string result = client.getAllSports();
+    // Ensure that the result is not empty. Adjust as needed based on expected response.
+    EXPECT_FALSE(result.empty());
+}
