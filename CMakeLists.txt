@@ -10,7 +10,8 @@ include_directories(include)
 add_executable(SportPulse
         src/main.cpp
         src/ApiClient.cpp
-        src/DataProcessor.cpp)
+        src/DataProcessor.cpp
+        src/SportService.cpp)
 
 target_link_libraries(SportPulse curl)
 
@@ -28,8 +29,10 @@ add_executable(SportPulseTests
         tests/test_main.cpp
         tests/test_api.cpp
         tests/test_cache.cpp
+        tests/test_sportservice.cpp
         src/ApiClient.cpp
-        src/DataProcessor.cpp)
+        src/DataProcessor.cpp
+        src/SportService.cpp)
 target_link_libraries(SportPulseTests gtest_main curl)
 
 include(GoogleTest)
