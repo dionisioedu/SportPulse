@@ -176,7 +176,7 @@ graph TD;
 
 1. **Clone the Repository:**
 ```bash
-git clone https://github.com/yourusername/SportPulse.git
+git clone https://github.com/dionisioedu/SportPulse.git
 cd SportPulse
 ```
 2. **Install Dependencies:**
