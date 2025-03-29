@@ -1,8 +1,15 @@
 #include "CLIInterface.h"
-#include <stdio.h>
+#include <iostream>
 
-CLIInterface::CLIInterface(LeagueService& leagueService, SportService& sportService, ILogger& logger)
-    : _leagueService(leagueService), _sportService(sportService), _logger(logger) {}
+CLIInterface::CLIInterface(
+    LeagueService& leagueService,
+    SportService& sportService,
+    CountryService& countryService,
+    ILogger& logger)
+    : _leagueService(leagueService),
+      _sportService(sportService),
+      _countryService(countryService),
+      _logger(logger) {}
 
 void CLIInterface::run() {
     int option = -1;
@@ -11,6 +18,7 @@ void CLIInterface::run() {
         std::cout << "\n--- Sport Pulse CLI Panel --\n";
         std::cout << "1. List Leagues\n";
         std::cout << "2. List Sports\n";
+        std::cout << "3. List Countries\n";
         std::cout << "\n0. Exit\n";
         std::cout << "\nSelect an option: ";
         std::cin >> option;
@@ -43,6 +51,22 @@ void CLIInterface::run() {
                     }
                 } else {
                     std::cout << "No sports data available.\n";
+                }
+
+                break;
+            }
+
+            case 3: {
+                _logger.log(ILogger::Level::INFO, "User selected: List Countries");
+                std::cout << "Fetching countries data...\n";
+                auto countries = _countryService.getCountries();
+                if (!countries.empty()) {
+                    std::cout << "\nCountries\n";
+                    for (const auto& country : countries) {
+                        std::cout << "Name: " << country.name << " - " << country.flag_url << "\n";
+                    }
+                } else {
+                    std::cout << "No countries data available.\n";
                 }
 
                 break;

@@ -1,21 +1,19 @@
 #ifndef SPORT_SERVICE_H
 #define SPORT_SERVICE_H
 
-#include "Sport.h"
-#include "League.h"
-#include <string>
 #include <vector>
-#include "Logger.h"
+#include "Sport.h"
+#include "ILogger.h"
 
 class SportService
 {
 public:
-    explicit SportService(Logger& logger) : logger_(logger) {}
+    explicit SportService(ILogger& logger) : _logger(logger) {}
 
     std::vector<Sport> getSports();
 
 private:
-    Logger& logger_;
+    ILogger& _logger;
 };
 
 #endif // SPORT_SERVICE_H

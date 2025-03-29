@@ -13,8 +13,9 @@ int main() {
 
     SportService sportService(logger);
     LeagueService leagueService(logger);
+    CountryService countryService(logger);
 
-    CLIInterface cli(leagueService, sportService, logger);
+    CLIInterface cli(leagueService, sportService, countryService, logger);
     cli.run();
 
     return 0;

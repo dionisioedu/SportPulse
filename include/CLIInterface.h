@@ -4,15 +4,22 @@
 #include "ILogger.h"
 #include "LeagueService.h"
 #include "SportService.h"
+#include "CountryService.h"
 
 class CLIInterface {
 public:
-    CLIInterface(LeagueService& leagueService, SportService& sportService, ILogger& logger);
+    CLIInterface(
+        LeagueService& leagueService,
+        SportService& sportService,
+        CountryService& countrySerice,
+        ILogger& logger);
+
     void run();
 
 private:
     LeagueService& _leagueService;
     SportService& _sportService;
+    CountryService& _countryService;
     ILogger& _logger;
 };
 

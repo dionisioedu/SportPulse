@@ -4,17 +4,17 @@
 #include "League.h"
 #include <string>
 #include <vector>
-#include "Logger.h"
+#include "ILogger.h"
 
 class LeagueService
 {
 public:
-    explicit LeagueService(Logger& logger) : logger_(logger) {}
+    explicit LeagueService(ILogger& logger) : logger_(logger) {}
 
     std::vector<League> getLeagues();
 
 private:
-    Logger& logger_;
+    ILogger& logger_;
 };
 
 #endif // LEAGUE_SERVICE_H
