@@ -6,15 +6,14 @@
 #include <vector>
 #include "ILogger.h"
 
-class LeagueService
-{
+class LeagueService {
 public:
-    explicit LeagueService(ILogger& logger) : logger_(logger) {}
+    explicit LeagueService(ILogger& logger) : _logger(logger) {}
 
     std::vector<League> getLeagues();
 
 private:
-    ILogger& logger_;
+    ILogger& _logger;
 };
 
 #endif // LEAGUE_SERVICE_H

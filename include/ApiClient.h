@@ -12,6 +12,7 @@ public:
     std::string getAllSports();
     std::string getAllLeagues();
     std::string getAllCountries();
+    std::string getLeaguesForCountry(std::string country);
 };
 
 #endif // API_CLIENT_H

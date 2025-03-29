@@ -62,3 +62,17 @@ std::string ApiClient::getAllCountries() {
     }
     return response;
 }
+
+std::string ApiClient::getLeaguesForCountry(std::string country) {
+    CURL* curl = curl_easy_init();
+    std::string response;
+    if (curl) {
+        const std::string url = apiUrl + "search_all_leagues.php?c=" + country;
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+        curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+    }
+    return response;
+}
