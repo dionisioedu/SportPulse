@@ -5,10 +5,12 @@ CLIInterface::CLIInterface(
     LeagueService& leagueService,
     SportService& sportService,
     CountryService& countryService,
+    LeagueForCountryService& leagueForCountryService,
     ILogger& logger)
     : _leagueService(leagueService),
       _sportService(sportService),
       _countryService(countryService),
+      _leagueForCountryService(leagueForCountryService),
       _logger(logger) {}
 
 void CLIInterface::run() {
@@ -19,6 +21,7 @@ void CLIInterface::run() {
         std::cout << "1. List Leagues\n";
         std::cout << "2. List Sports\n";
         std::cout << "3. List Countries\n";
+        std::cout << "4. List Leagues for Country\n";
         std::cout << "\n0. Exit\n";
         std::cout << "\nSelect an option: ";
         std::cin >> option;
@@ -64,6 +67,27 @@ void CLIInterface::run() {
                     std::cout << "\nCountries\n";
                     for (const auto& country : countries) {
                         std::cout << "Name: " << country.name << " - " << country.flag_url << "\n";
+                    }
+                } else {
+                    std::cout << "No countries data available.\n";
+                }
+
+                break;
+            }
+
+            case 4: {
+                _logger.log(ILogger::Level::INFO, "User selected: List Leagues For Country");
+
+                std::string country;
+                std::cout << "Please enter a valid country name: ";
+                std::cin >> country;
+
+                std::cout << "Fetching leagues for country data for " << country << "...\n";
+                auto leagues = _leagueForCountryService.getAllLeaguesForCountry(country);
+                if (!leagues.empty()) {
+                    std::cout << "\nLeagues\n";
+                    for (const auto& league : leagues) {
+                        std::cout << "ID: " << league.idLeague << " - " << league.strLeague << "\n";
                     }
                 } else {
                     std::cout << "No countries data available.\n";

@@ -14,7 +14,8 @@ add_executable(SportPulse
         src/DataProcessor.cpp
         src/SportService.cpp
         src/LeagueService.cpp
-        src/CountryService.cpp)
+        src/CountryService.cpp
+        src/LeagueForCountryService.cpp)
 
 target_link_libraries(SportPulse curl)
 
@@ -35,11 +36,13 @@ add_executable(SportPulseTests
         tests/test_sportservice.cpp
         tests/test_leagueservice.cpp
         tests/test_countryservice.cpp
+        tests/test_leagueforcountryservice.cpp
         src/ApiClient.cpp
         src/DataProcessor.cpp
         src/SportService.cpp
         src/LeagueService.cpp
-        src/CountryService.cpp)
+        src/CountryService.cpp
+        src/LeagueForCountryService.cpp)
 target_link_libraries(SportPulseTests gtest_main curl)
 
 include(GoogleTest)

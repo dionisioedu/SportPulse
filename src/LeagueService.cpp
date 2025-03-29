@@ -4,7 +4,6 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
-#include <iostream>
 
 using json = nlohmann::json;
 
@@ -19,7 +18,7 @@ std::vector<League> LeagueService::getLeagues() {
 
     ApiClient client;
     std::string response = client.getAllLeagues();
-    logger_.log(ILogger::Level::DEBUG, "Response: " + response);
+    _logger.log(ILogger::Level::DEBUG, "Response: " + response);
 
     std::vector<League> leagues;
 
@@ -36,7 +35,8 @@ std::vector<League> LeagueService::getLeagues() {
             }
         }
     } catch (const std::exception& e) {
-        std::cerr << "Error parsing JSON: " << e.what() << std::endl;
+        std::string error_message(e.what());
+        _logger.log(ILogger::Level::ERROR, error_message);
     }
 
     cache.put(cacheKey, leagues, std::chrono::hours(1));
