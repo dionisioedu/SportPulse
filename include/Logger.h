@@ -9,9 +9,10 @@
 #include <iomanip>
 #include <sstream>
 
-class Logger {
+#include "ILogger.h"
+
+class Logger : public ILogger {
 public:
-    enum class Level { DEBUG, INFO, WARNING, ERROR, FATAL };
 
     Logger(const std::string &logFile = "sportpulse.log") {
         logStream.open(logFile, std::ios::app);
@@ -22,7 +23,7 @@ public:
             logStream.close();
     }
 
-    virtual void log(Level level, const std::string &message) {
+    void log(Level level, const std::string &message) override {
         std::lock_guard<std::mutex> lock(mutex);
         std::string levelStr;
         switch (level) {

@@ -9,6 +9,7 @@ include_directories(include)
 
 add_executable(SportPulse
         src/main.cpp
+        src/CLIInterface.cpp
         src/ApiClient.cpp
         src/DataProcessor.cpp
         src/SportService.cpp
