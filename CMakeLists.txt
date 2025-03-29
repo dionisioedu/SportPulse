@@ -9,10 +9,12 @@ include_directories(include)
 
 add_executable(SportPulse
         src/main.cpp
+        src/CLIInterface.cpp
         src/ApiClient.cpp
         src/DataProcessor.cpp
         src/SportService.cpp
-        src/LeagueService.cpp)
+        src/LeagueService.cpp
+        src/CountryService.cpp)
 
 target_link_libraries(SportPulse curl)
 
@@ -32,10 +34,12 @@ add_executable(SportPulseTests
         tests/test_cache.cpp
         tests/test_sportservice.cpp
         tests/test_leagueservice.cpp
+        tests/test_countryservice.cpp
         src/ApiClient.cpp
         src/DataProcessor.cpp
         src/SportService.cpp
-        src/LeagueService.cpp)
+        src/LeagueService.cpp
+        src/CountryService.cpp)
 target_link_libraries(SportPulseTests gtest_main curl)
 
 include(GoogleTest)

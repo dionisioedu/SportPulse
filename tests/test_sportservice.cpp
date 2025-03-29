@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "SportService.h"
 
-class FakeLogger : public Logger {
+class FakeLogger : public ILogger {
 public:
     std::vector<std::string> logs;
 
