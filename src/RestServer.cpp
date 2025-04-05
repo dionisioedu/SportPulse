@@ -30,7 +30,7 @@ RestServer::RestServer(
     _listener = http_listener(utility::conversions::to_string_t(address));
     _listener.support(methods::GET, [this](http_request request) {
         auto path = uri::split_path(uri::decode(request.request_uri().path()));
-        if (path.empty() || path[0] != U("api") || (path.size() == 1 && (path[0].empty() || path[0] == U("api")))) {
+        if (path.empty() || path[0] == U("api") || (path.size() == 1 && (path[0].empty() || path[0] == U("api")))) {
             // If GET / is requested, return a simple HTML page
             http_response response(status_codes::OK);
             response.headers().add(U("Content-Type"), U("text/html"));
