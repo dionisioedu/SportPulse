@@ -82,8 +82,13 @@ void CLIInterface::run() {
                 std::cout << "Please enter a valid country name: ";
                 std::cin >> country;
 
+                std::string sport;
+                std::cout << "\nPlease enter a valid sport: ";
+                std::cin.ignore();
+                std::getline(std::cin, sport);
+
                 std::cout << "Fetching leagues for country data for " << country << "...\n";
-                auto leagues = _leagueForCountryService.getAllLeaguesForCountry(country);
+                auto leagues = _leagueForCountryService.getAllLeaguesForCountry(country, sport);
                 if (!leagues.empty()) {
                     std::cout << "\nLeagues\n";
                     for (const auto& league : leagues) {

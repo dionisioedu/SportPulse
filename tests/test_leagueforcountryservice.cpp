@@ -14,3 +14,14 @@ TEST(LeagueForCountryServiceTest, GetLeaguesForCountryReturnsData) {
     std::vector<LeagueForCountry> result = service.getAllLeaguesForCountry("Brazil");
     EXPECT_FALSE(result.empty());
 }
+
+TEST(LeagueForCountryServiceTest, GetLeaguesForCountryAndSportReturnsData) {
+    FakeLogger logger;
+    LeagueForCountryService service(logger);
+    auto result = service.getAllLeaguesForCountry("Brazil", "Soccer");
+    EXPECT_FALSE(result.empty());
+
+    for_each(result.begin(), result.end(), [](const auto& item) {
+        EXPECT_STREQ(item.strSport.c_str(), "Soccer");
+    });
+}
