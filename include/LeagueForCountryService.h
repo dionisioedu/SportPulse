@@ -9,7 +9,7 @@ class LeagueForCountryService {
 public:
     explicit LeagueForCountryService(ILogger& logger) : _logger(logger) {}
 
-    std::vector<LeagueForCountry> getAllLeaguesForCountry(std::string country);
+    [[nodiscard]] std::vector<LeagueForCountry> getAllLeaguesForCountry(std::string country, std::string sport = "");
 
 private:
     ILogger& _logger;

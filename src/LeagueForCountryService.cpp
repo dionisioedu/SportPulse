@@ -12,14 +12,21 @@ inline std::string getString(const json& item, const std::string& key) {
     return item.contains(key) && !item[key].is_null() ? item[key].get<std::string>() : "";
 }
 
-std::vector<LeagueForCountry> LeagueForCountryService::getAllLeaguesForCountry(std::string country) {
+std::vector<LeagueForCountry> LeagueForCountryService::getAllLeaguesForCountry(const std::string country, const std::string sport) {
 
-    if (auto cached = cache.get(cacheKey + country); cached.has_value()) {
+    if (auto cached = cache.get(cacheKey + country + sport); cached.has_value()) {
         return cached.value();
     }
 
     ApiClient client;
-    std::string response = client.getLeaguesForCountry(country);
+    std::string response;
+    
+    if (sport == "") {
+        response = client.getLeaguesForCountry(country);
+    } else {
+        response = client.getLeaguesForCountry(country, sport);
+    }
+
     _logger.log(ILogger::Level::DEBUG, "Response: " + response);
 
     std::vector<LeagueForCountry> leagues;
@@ -27,7 +34,6 @@ std::vector<LeagueForCountry> LeagueForCountryService::getAllLeaguesForCountry(s
     try {
         auto j = json::parse(response);
         if (j.contains("countries") && j["countries"].is_array()) {
-            _logger.log(ILogger::Level::DEBUG, "Entrou no if");
 
             for (const auto& item : j["countries"]) {
                 LeagueForCountry league;
@@ -86,7 +92,7 @@ std::vector<LeagueForCountry> LeagueForCountryService::getAllLeaguesForCountry(s
         _logger.log(ILogger::Level::ERROR, error_message);
     }
 
-    cache.put(cacheKey + country, leagues, std::chrono::hours(1));
+    cache.put(cacheKey + country + sport, leagues, std::chrono::hours(1));
 
     return leagues;
 }
