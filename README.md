@@ -1,6 +1,8 @@
 # SportPulse
 
-**SportPulse** is a real-time sports score aggregator built with high-performance C++ and designed following modern architecture and SRE best practices. The system consumes data from the free [TheSportsDB API](https://www.thesportsdb.com), processes live scores and events with sub-500ms latency, and exposes this information through a Command Line Interface (CLI) – with plans for a REST API and interactive web dashboard. Containerized for cloud deployment and integrated with Prometheus/Grafana for monitoring, SportPulse is built to showcase excellence in C++ performance, full-stack development, and site reliability engineering (SRE).
+**SportPulse** is a real-time sports score aggregator built with high-performance C++ and designed following modern architecture and SRE best practices.
+The system consumes data from the free [TheSportsDB API](https://www.thesportsdb.com), processes live scores and events with sub-500ms latency, and exposes this information through a Command Line Interface (CLI), for a REST API and interactive web dashboard.
+Containerized for cloud deployment and integrated with Prometheus/Grafana for monitoring, SportPulse is built to showcase excellence in C++ performance, full-stack development, and site reliability engineering (SRE).
 
 ---
 
@@ -31,7 +33,7 @@
 SportPulse is designed to deliver a robust demonstration of:
 
 - **C++ Performance:** High-efficiency processing of live sports data.
-- **Full-Stack Development:** Starting with a CLI and planning for a RESTful API and interactive dashboard.
+- **Full-Stack Development:** With a CLI, a RESTful API and interactive dashboard.
 - **Architecture:** A modular, scalable, and maintainable design.
 - **SRE Practices:** Integrated monitoring, automated deployments, observability, and resilience testing.
 
@@ -67,9 +69,9 @@ The project not only provides real-time sports analytics for fans and media part
 
 ```mermaid
 graph TD;
-    A["User"] --> B["Load Balancer (AWS ALB or Similar)"];
-    B --> C["SportPulse Containers (ECS/Kubernetes)"];
-    C --> D["C++ Core Processing Module"];
+    A["User<br>(Website | Mobile App)"] --> B["Load Balancer<br>(AWS | GCP | Azure)"];
+    B --> C["SportPulse Containers (Kubernetes)"];
+    C --> D["C++ Core Processing Module (Container)"];
     D --> E["Real-Time Data Processing"];
     D --> F["Statistics Calculation"];
     E --> G["API Integration (TheSportsDB)"];
@@ -109,8 +111,8 @@ Handles communication with external services (TheSportsDB), including:
 **CLI Interface:**  
 - Provides a Command Line Interface (CLI) for immediate interaction with live scores and statistics.
 
-**Future Expansion:**  
-- A planned RESTful API (e.g., GET `/live-scores`) and an interactive web dashboard to increase accessibility and monetization potential.
+**Rest API:**  
+- A RESTful API (e.g., GET `/leagues`) and an interactive web dashboard to increase accessibility and monetization potential.
 
 ---
 
@@ -147,7 +149,7 @@ Handles communication with external services (TheSportsDB), including:
 
 ---
 
-## Mermaid Diagram: Component Breakdown
+## Component Breakdown
 
 ```mermaid
 graph TD;
@@ -185,7 +187,6 @@ Ensure that libcurl and the JSON library are installed on your system. For examp
 sudo apt-get update
 sudo apt-get install libcurl4-openssl-dev
 sudo apt-get install libcpprest-dev
-# For nlohmann/json, install via package manager or add it as a submodule
 ```
 3. **Build the Project:**
 ```bash
@@ -206,36 +207,16 @@ The CLI will output live scores and calculated statistics (e.g., average goals p
 # Deployment
 ## Docker Containerization
 1. **Build the Docker Image:**
-Create a Dockerfile with the following sample content:
-```dockerfile
-# Use an official Ubuntu base image
-FROM ubuntu:20.04
-
-# Install necessary packages
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libcurl4-openssl-dev \
-    cmake \
-    git
-
-# Copy the source code into the container
-COPY . /app
-WORKDIR /app
-
-# Build the application
-RUN mkdir build && cd build && cmake .. && make
-
-# Set the entry point to run the application
-ENTRYPOINT ["./build/SportPulse"]
-```
-2. **Build the Docker image:**
 ```bash
 docker build -t sportpulse:latest .
 ```
-3. **Push to Docker Hub:**
+2. **Run Docker image:**
 ```bash
-docker tag sportpulse:latest yourdockerhubusername/sportpulse:latest
-docker push yourdockerhubusername/sportpulse:latest
+docker run -p 8080:8080 sportpulse:latest
+```
+3. **From Dockerhub:**
+```bash
+docker pull eduardofernandes/sportpulse:latest
 ```
 ---
 ## Cloud Deployment
@@ -268,9 +249,6 @@ Deploy the Docker container to your preferred cloud provider (e.g., AWS ECS, Dig
 
 ---
 # Future Roadmap
-- **REST API & Web Dashboard:**
-Develop a RESTful API endpoint and a modern web dashboard to provide enhanced user interaction and analytics.
-
 - **Advanced Analytics:**
 Add features for detailed statistical analysis and predictive insights on sports events.
 
@@ -288,7 +266,7 @@ To contribute:
 
 Fork the repository.
 Create a feature branch.
-Make your changes and ensure they follow our coding standards.
+Make your changes and ensure they follow our coding standards. 
 Submit a pull request for review.
 For issues or feature requests, please use the GitHub issues tracker.
 
