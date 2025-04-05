@@ -6,6 +6,14 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::experimental::listener;
 
+namespace {
+    void addCORSHeaders(http_response& response) {
+        response.headers().add(U("Access-Control-Allow-Origin"), U("*"));
+        response.headers().add(U("Access-Control-Allow-Methods"), U("GET, POST, OPTIONS"));
+        response.headers().add(U("Access-Control-Allow-Headers"), U("Content-Type"));
+    }
+}
+
 RestServer::RestServer(
     const std::string& address,
     LeagueService& leagueService,
@@ -79,9 +87,11 @@ void RestServer::handle_get_leagues(web::http::http_request request) {
         jArray[i] = jLeague;
     }
 
-    request.reply(status_codes::OK, jArray);
-    _logger.log(ILogger::Level::INFO, "Sending response with leagues.");
-    _logger.log(ILogger::Level::DEBUG, "Leagues: " + jArray.serialize());
+    http_response response(status_codes::OK);
+    addCORSHeaders(response);
+    response.headers().add(U("Content-Type"), U("application/json"));
+    response.set_body(jArray);
+    request.reply(response);
 }
 
 void RestServer::handle_get_sports(web::http::http_request request) {
@@ -95,7 +105,12 @@ void RestServer::handle_get_sports(web::http::http_request request) {
 
         jArray[i] = jSport;
     }
-    request.reply(status_codes::OK, jArray);
+
+    http_response response(status_codes::OK);
+    addCORSHeaders(response);
+    response.headers().add(U("Content-Type"), U("application/json"));
+    response.set_body(jArray);
+    request.reply(response);
 }
 
 void RestServer::handle_get_countries(web::http::http_request request) {
@@ -108,7 +123,12 @@ void RestServer::handle_get_countries(web::http::http_request request) {
         jCountry[U("flag_url")] = json::value::string(utility::conversions::to_string_t(countries[i].flag_url));
         jArray[i] = jCountry;
     }
-    request.reply(status_codes::OK, jArray);
+
+    http_response response(status_codes::OK);
+    addCORSHeaders(response);
+    response.headers().add(U("Content-Type"), U("application/json"));
+    response.set_body(jArray);
+    request.reply(response);
 }
 
 void RestServer::handle_get_leagues_for_country(web::http::http_request request) {
@@ -131,5 +151,10 @@ void RestServer::handle_get_leagues_for_country(web::http::http_request request)
         jLeague[U("strLeague")] = json::value::string(utility::conversions::to_string_t(leagues[i].strLeague));
         jArray[i] = jLeague;
     }
-    request.reply(status_codes::OK, jArray);
+
+    http_response response(status_codes::OK);
+    addCORSHeaders(response);
+    response.headers().add(U("Content-Type"), U("application/json"));
+    response.set_body(jArray);
+    request.reply(response);
 }
