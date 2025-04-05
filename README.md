@@ -165,7 +165,7 @@ graph TD;
 **Development Tools:**
 - C++ compiler (e.g., g++)
 - CMake for build automation
-- libcurl and nlohmann/json libraries
+- libcurl, nlohmann/json and libcpprest-dev libraries
 - Docker for containerization
 - Python 3 for automation scripts
 
@@ -184,6 +184,7 @@ Ensure that libcurl and the JSON library are installed on your system. For examp
 ```bash
 sudo apt-get update
 sudo apt-get install libcurl4-openssl-dev
+sudo apt-get install libcpprest-dev
 # For nlohmann/json, install via package manager or add it as a submodule
 ```
 3. **Build the Project:**

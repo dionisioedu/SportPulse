@@ -11,13 +11,14 @@ add_executable(SportPulse
         src/main.cpp
         src/CLIInterface.cpp
         src/ApiClient.cpp
+        src/RestServer.cpp
         src/DataProcessor.cpp
         src/SportService.cpp
         src/LeagueService.cpp
         src/CountryService.cpp
         src/LeagueForCountryService.cpp)
 
-target_link_libraries(SportPulse curl)
+target_link_libraries(SportPulse curl pthread crypto ssl cpprest)
 
 enable_testing()
 
