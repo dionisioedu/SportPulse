@@ -6,6 +6,8 @@
 #include "IApiClient.h"
 #include "models/Team.h"
 #include "models/Player.h"
+#include "models/Event.h"
+#include "models/Venue.h"
 
 class SearchService {
     ILogger& log;
@@ -18,6 +20,10 @@ public:
     [[nodiscard]] std::vector<Team> searchTeamsByShortCode(const std::string shortCode);
     [[nodiscard]] std::vector<Player> searchPlayers(const std::string playerName);
     [[nodiscard]] std::vector<Player> searchPlayersFromTeam(const std::string teamName);
+    [[nodiscard]] std::vector<Event> searchEventByName(const std::string eventName);
+    [[nodiscard]] std::vector<Event> searchEventsByNameAndYear(const std::string eventName, const std::string startYear, const std::string endYear);
+    [[nodiscard]] std::vector<Event> searchEventByEventFileName(const std::string eventFileName);
+    [[nodiscard]] std::vector<Venue> searchForVenue(const std::string venueName);
 
 };
 
