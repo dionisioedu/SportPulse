@@ -30,6 +30,8 @@ Containerized for cloud deployment and integrated with Prometheus/Grafana for mo
 
 ## Overview
 
+![Diagram](diagram.png)
+
 SportPulse is designed to deliver a robust demonstration of:
 
 - **C++ Performance:** High-efficiency processing of live sports data.
