@@ -15,7 +15,7 @@ public:
     std::string searchTeams(const std::string teamName) override;
     std::string searchTeamsByShortCode(const std::string shortCode) override;
     std::string searchPlayers(const std::string playerName) override;
-    std::string searchPlayersByTeam(const std::string teamName) override;
+    std::string searchPlayersFromTeam(const std::string teamName) override;
     std::string searchEventByName(const std::string eventName) override;
     std::string searchEventsByNameAndYear(const std::string eventName, const std::string startYear, const std::string endYear) override;
     std::string searchEventByEventFileName(const std::string eventFileName) override;

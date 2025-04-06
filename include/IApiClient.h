@@ -6,7 +6,7 @@ public:
     [[nodiscard]] virtual std::string searchTeams(const std::string teamName) = 0;
     [[nodiscard]] virtual std::string searchTeamsByShortCode(const std::string shortCode) = 0;
     [[nodiscard]] virtual std::string searchPlayers(const std::string playerName) = 0;
-    [[nodiscard]] virtual std::string searchPlayersByTeam(const std::string teamName) = 0;
+    [[nodiscard]] virtual std::string searchPlayersFromTeam(const std::string teamName) = 0;
     [[nodiscard]] virtual std::string searchEventByName(const std::string eventName) = 0;
     [[nodiscard]] virtual std::string searchEventsByNameAndYear(const std::string eventName, const std::string startYear, const std::string endYear) = 0;
     [[nodiscard]] virtual std::string searchEventByEventFileName(const std::string eventFileName) = 0;
