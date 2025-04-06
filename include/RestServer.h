@@ -24,10 +24,18 @@ public:
     void stop();
 
 private:
-    void handle_get_leagues(web::http::http_request request);
-    void handle_get_sports(web::http::http_request request);
-    void handle_get_countries(web::http::http_request request);
-    void handle_get_leagues_for_country(web::http::http_request request);
+    void handleGetLeagues(web::http::http_request request);
+    void handleGetSports(web::http::http_request request);
+    void handleGetCountries(web::http::http_request request);
+    void handleGetLeaguesForCountry(web::http::http_request request);
+    void handleSearchTeamsByName(web::http::http_request request);
+    void handleSearchTeamsByShortCode(web::http::http_request request);
+    void handleSearchPlayers(web::http::http_request request);
+    void handleSearchPlayersFromTeam(web::http::http_request request);
+    void handleSearchEventByName(web::http::http_request request);
+    void handleSearchEventsByNameAndYear(web::http::http_request request);
+    void handleSearchEventByEventFileName(web::http::http_request request);
+    void handleSearchForVenue(web::http::http_request request);
 
     web::http::experimental::listener::http_listener _listener;
     LeagueService& _leagueService;

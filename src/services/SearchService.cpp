@@ -6,6 +6,8 @@ using json = nlohmann::json;
 
 static Cache<std::string, std::vector<Team>> teamCache;
 static Cache<std::string, std::vector<Player>> playerCache;
+static Cache<std::string, std::vector<Event>> eventCache;
+static Cache<std::string, std::vector<Venue>> venueCache;
 
 std::vector<Team> SearchService::searchTeamsByName(const std::string teamName) {
 
@@ -121,4 +123,120 @@ std::vector<Player> SearchService::searchPlayersFromTeam(const std::string teamN
     playerCache.put(teamName, players, std::chrono::hours(1));
 
     return players;
+}
+
+std::vector<Event> SearchService::searchEventByName(const std::string eventName) {
+
+    if (auto cached = eventCache.get(eventName); cached.has_value()) {
+        return cached.value();
+    }
+
+    log.log(ILogger::Level::DEBUG, "SearchService requesting ApiClient for searchEventByName: " + eventName);
+
+    std::string response = apiClient.searchEventByName(eventName);
+    log.log(ILogger::Level::DEBUG, "Response: " + response);
+
+    std::vector<Event> events;
+    try {
+        auto j = json::parse(response);
+        if (j.contains("event") && j["event"].is_array()) {
+            for (const auto& item : j["event"]) {
+                events.push_back(Event(item));
+            }
+        }
+    } catch (std::exception& e) {
+        std::string error_message("Error parsin JSON: " + std::string(e.what()));
+        log.log(ILogger::Level::ERROR, error_message);
+    }
+
+    eventCache.put(eventName, events, std::chrono::hours(1));
+
+    return events;
+}
+
+std::vector<Event> SearchService::searchEventsByNameAndYear(const std::string eventName, const std::string startYear, const std::string endYear) {
+
+    if (auto cached = eventCache.get(eventName + startYear + endYear); cached.has_value()) {
+        return cached.value();
+    }
+
+    log.log(ILogger::Level::DEBUG, "SearchService requesting ApiClient for searchEventByNameAndYear: " + eventName);
+
+    std::string response = apiClient.searchEventsByNameAndYear(eventName, startYear, endYear);
+    log.log(ILogger::Level::DEBUG, "Response: " + response);
+
+    std::vector<Event> events;
+    try {
+        auto j = json::parse(response);
+        if (j.contains("event") && j["event"].is_array()) {
+            for (const auto& item : j["event"]) {
+                events.push_back(Event(item));
+            }
+        }
+    } catch (std::exception& e) {
+        std::string error_message("Error parsin JSON: " + std::string(e.what()));
+        log.log(ILogger::Level::ERROR, error_message);
+    }
+
+    eventCache.put(eventName + startYear + endYear, events, std::chrono::hours(1));
+
+    return events;
+}
+
+std::vector<Event> SearchService::searchEventByEventFileName(const std::string eventFileName) {
+
+    if (auto cached = eventCache.get(eventFileName); cached.has_value()) {
+        return cached.value();
+    }
+
+    log.log(ILogger::Level::DEBUG, "SearchService requesting ApiClient for searchEventByEventFileName: " + eventFileName);
+
+    std::string response = apiClient.searchEventByEventFileName(eventFileName);
+    log.log(ILogger::Level::DEBUG, "Response: " + response);
+
+    std::vector<Event> events;
+    try {
+        auto j = json::parse(response);
+        if (j.contains("event") && j["event"].is_array()) {
+            for (const auto& item : j["event"]) {
+                events.push_back(Event(item));
+            }
+        }
+    } catch (std::exception& e) {
+        std::string error_message("Error parsin JSON: " + std::string(e.what()));
+        log.log(ILogger::Level::ERROR, error_message);
+    }
+
+    eventCache.put(eventFileName, events, std::chrono::hours(1));
+
+    return events;
+}
+
+std::vector<Venue> SearchService::searchForVenue(const std::string venueName) {
+
+    if (auto cached = venueCache.get(venueName); cached.has_value()) {
+        return cached.value();
+    }
+
+    log.log(ILogger::Level::DEBUG, "SearchService requesting ApiClient for searchForVenue: " + venueName);
+
+    std::string response = apiClient.searchForVenue(venueName);
+    log.log(ILogger::Level::DEBUG, "Response: " + response);
+
+    std::vector<Venue> venues;
+    try {
+        auto j = json::parse(response);
+        if (j.contains("venues") && j["venues"].is_array()) {
+            for (const auto& item : j["venues"]) {
+                venues.push_back(Venue(item));
+            }
+        }
+    } catch (std::exception& e) {
+        std::string error_message("Error parsin JSON: " + std::string(e.what()));
+        log.log(ILogger::Level::ERROR, error_message);
+    }
+
+    venueCache.put(venueName, venues, std::chrono::hours(1));
+
+    return venues;
 }
