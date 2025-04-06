@@ -1,16 +1,16 @@
 #ifndef LEAGUE_SERVICE_H
 #define LEAGUE_SERVICE_H
 
-#include "League.h"
 #include <string>
 #include <vector>
-#include "ILogger.h"
+#include "utils/ILogger.h"
+#include "models/League.h"
 
 class LeagueService {
 public:
     explicit LeagueService(ILogger& logger) : _logger(logger) {}
 
-    std::vector<League> getLeagues();
+    [[nodiscard]] std::vector<League> getLeagues();
 
 private:
     ILogger& _logger;

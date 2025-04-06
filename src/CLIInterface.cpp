@@ -6,11 +6,13 @@ CLIInterface::CLIInterface(
     SportService& sportService,
     CountryService& countryService,
     LeagueForCountryService& leagueForCountryService,
+    SearchService& searchService,
     ILogger& logger)
     : _leagueService(leagueService),
       _sportService(sportService),
       _countryService(countryService),
       _leagueForCountryService(leagueForCountryService),
+      _searchService(searchService),
       _logger(logger) {}
 
 void CLIInterface::run() {

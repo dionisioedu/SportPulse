@@ -2,15 +2,15 @@
 #define SPORT_SERVICE_H
 
 #include <vector>
-#include "Sport.h"
-#include "ILogger.h"
+#include "models/Sport.h"
+#include "utils/ILogger.h"
 
 class SportService
 {
 public:
     explicit SportService(ILogger& logger) : _logger(logger) {}
 
-    std::vector<Sport> getSports();
+    [[nodiscard]] std::vector<Sport> getSports();
 
 private:
     ILogger& _logger;

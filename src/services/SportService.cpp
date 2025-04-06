@@ -1,10 +1,9 @@
-#include "SportService.h"
-#include "ApiClient.h"
-#include "Cache.h"
-#include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
-#include <iostream>
+#include <nlohmann/json.hpp>
+#include "services/SportService.h"
+#include "ApiClient.h"
+#include "utils/Cache.h"
 
 using json = nlohmann::json;
 
@@ -39,7 +38,8 @@ std::vector<Sport> SportService::getSports() {
             }
         }
     } catch (const std::exception& e) {
-        std::cerr << "Error parsing JSON: " << e.what() << std::endl;
+        std::string error_message("Error parsing JSON: " + std::string(e.what()));
+        _logger.log(ILogger::Level::ERROR, error_message);
     }
 
     cache.put(cacheKey, sports, std::chrono::hours(1));

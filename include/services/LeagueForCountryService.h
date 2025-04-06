@@ -1,9 +1,9 @@
 #ifndef LEAGUE_FOR_COUNTRY_SERVICE_H
 #define LEAGUE_FOR_COUNTRY_SERVICE_H
 
-#include "LeagueForCountry.h"
 #include <vector>
-#include "ILogger.h"
+#include "utils/ILogger.h"
+#include "models/LeagueForCountry.h"
 
 class LeagueForCountryService {
 public:
