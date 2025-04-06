@@ -2,13 +2,15 @@
 #include <thread>
 #include <chrono>
 #include "CLIInterface.h"
-#include "SportService.h"
-#include "LeagueService.h"
-#include "LeagueForCountryService.h"
-#include "CountryService.h"
+#include "ApiClient.h"
+#include "services/SportService.h"
+#include "services/LeagueService.h"
+#include "services/LeagueForCountryService.h"
+#include "services/CountryService.h"
+#include "services/SearchService.h"
 #include "RestServer.h"
-#include "Cache.h"
-#include "Logger.h"
+#include "utils/Cache.h"
+#include "utils/Logger.h"
 
 int main(int argc, char* argv[]) {
     Logger logger("sportpulse.log");
@@ -19,6 +21,9 @@ int main(int argc, char* argv[]) {
     LeagueService leagueService(logger);
     CountryService countryService(logger);
     LeagueForCountryService leagueForCountryService(logger);
+
+    ApiClient apiClient;
+    SearchService searchService(logger, apiClient);
 
     // Parse command-line arguments to decide mode: --api, --cli, or both.
     bool runApi = false;
@@ -41,7 +46,15 @@ int main(int argc, char* argv[]) {
     std::thread restThread;
     if (runApi) {
         utility::string_t address = U("http://0.0.0.0:8080/");
-        restServer = new RestServer(address, leagueService, sportService, countryService, leagueForCountryService, logger);
+        restServer = new RestServer(
+            address,
+            leagueService,
+            sportService,
+            countryService,
+            leagueForCountryService,
+            searchService,
+            logger);
+
         restThread = std::thread([&]() {
             try {
                 restServer->start();
@@ -52,7 +65,14 @@ int main(int argc, char* argv[]) {
     }
 
     if (runCli) {
-        CLIInterface cli(leagueService, sportService, countryService, leagueForCountryService, logger);
+        CLIInterface cli(
+            leagueService,
+            sportService,
+            countryService,
+            leagueForCountryService,
+            searchService,
+            logger);
+
         cli.run();
     } else {
         logger.log(ILogger::Level::INFO, "API is running. Waiting for termination signal...");

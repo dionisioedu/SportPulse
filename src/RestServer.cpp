@@ -20,11 +20,13 @@ RestServer::RestServer(
     SportService& sportService,
     CountryService& countryService,
     LeagueForCountryService& leagueForCountryService,
+    SearchService& searchService,
     ILogger& logger)
     : _leagueService(leagueService),
       _sportService(sportService),
       _countryService(countryService),
       _leagueForCountryService(leagueForCountryService),
+      _searchService(searchService),
       _logger(logger) {
 
     _listener = http_listener(utility::conversions::to_string_t(address));

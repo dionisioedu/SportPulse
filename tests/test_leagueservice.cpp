@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "LeagueService.h"
+#include "services/LeagueService.h"
 
 class FakeLogger : public ILogger {
 public:

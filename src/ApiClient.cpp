@@ -21,8 +21,36 @@ std::string ApiClient::request(const std::string endpoint) {
     return response;
 }
 
-std::string ApiClient::fetchLiveScores() {
-    return request("eventslast.php?id=133602");
+std::string ApiClient::searchTeams(const std::string teamName) {
+    return request("searchteams.php?t=" + teamName);
+}
+
+std::string ApiClient::searchTeamsByShortCode(const std::string shortCode) {
+    return request("searchteams.php?sname=" + shortCode);
+}
+
+std::string ApiClient::searchPlayers(const std::string playerName) {
+    return request("searchplayers.php?p=" + playerName);
+}
+
+std::string ApiClient::searchPlayersByTeam(const std::string teamName) {
+    return request("searchplayers.php?t=" + teamName);
+}
+
+std::string ApiClient::searchEventByName(const std::string eventName) {
+    return request("searchevents.php?e=" + eventName);
+}
+
+std::string ApiClient::searchEventsByNameAndYear(const std::string eventName, const std::string startYear, const std::string endYear) {
+    return request("searchevents.php?e=" + eventName + "&=" + startYear + "-" + endYear);
+}
+
+std::string ApiClient::searchEventByEventFileName(const std::string eventFileName) {
+    return request("searchfilename.php?e=" + eventFileName);
+}
+
+std::string ApiClient::searchForVenue(const std::string venueName) {
+    return request("searchvenues.php?t=" + venueName);
 }
 
 std::string ApiClient::getAllSports() {
@@ -43,4 +71,8 @@ std::string ApiClient::getLeaguesForCountry(const std::string country) {
 
 std::string ApiClient::getLeaguesForCountry(const std::string country, const std::string sport) {
     return request("search_all_leagues.php?c=" + country + "&s=" + sport);
+}
+
+std::string ApiClient::fetchLiveScores() {
+    return request("eventslast.php?id=133602");
 }

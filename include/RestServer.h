@@ -2,11 +2,12 @@
 #define REST_SERVER_H
 
 #include <cpprest/http_listener.h>
-#include "LeagueService.h"
-#include "SportService.h"
-#include "CountryService.h"
-#include "LeagueForCountryService.h"
-#include "ILogger.h"
+#include "services/LeagueService.h"
+#include "services/SportService.h"
+#include "services/CountryService.h"
+#include "services/LeagueForCountryService.h"
+#include "services/SearchService.h"
+#include "utils/ILogger.h"
 
 class RestServer {
 public:
@@ -16,6 +17,7 @@ public:
         SportService& sportService,
         CountryService& countryService,
         LeagueForCountryService& leagueForCountryService,
+        SearchService& searchService,
         ILogger& logger);
 
     void start();
@@ -32,6 +34,7 @@ private:
     SportService& _sportService;
     CountryService& _countryService;
     LeagueForCountryService& _leagueForCountryService;
+    SearchService& _searchService;
     ILogger& _logger;
 };
 

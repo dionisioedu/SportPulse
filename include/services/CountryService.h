@@ -2,14 +2,14 @@
 #define COUNTRY_SERVICE_H
 
 #include <vector>
-#include "ILogger.h"
-#include "Country.h"
+#include "utils/ILogger.h"
+#include "models/Country.h"
 
 class CountryService {
 public:
     explicit CountryService(ILogger& logger) : _logger(logger) {}
 
-    std::vector<Country> getCountries();
+    [[nodiscard]] std::vector<Country> getCountries();
 
 private:
     ILogger& _logger;
