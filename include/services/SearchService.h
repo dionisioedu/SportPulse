@@ -14,6 +14,7 @@ public:
     explicit SearchService(ILogger& log, IApiClient& apiClient) : log(log), apiClient(apiClient) {}
 
     [[nodiscard]] std::vector<Team> searchTeamsByName(const std::string teamName);
+    [[nodiscard]] std::vector<Team> searchTeamsByShortCode(const std::string shortCode);
 
 };
 

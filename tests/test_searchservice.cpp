@@ -86,7 +86,10 @@ public:
         return searchTeamsData;
     };
 
-    std::string searchTeamsByShortCode(const std::string shortCode) override { return ""; };
+    std::string searchTeamsByShortCode(const std::string shortCode) override {
+      return searchTeamsData;
+    };
+
     std::string searchPlayers(const std::string playerName) override { return ""; };
     std::string searchPlayersByTeam(const std::string teamName) override { return ""; };
     std::string searchEventByName(const std::string eventName) override { return ""; };
@@ -108,5 +111,13 @@ TEST(SearchServiceTest, SearchTeamsByNameReturnsData) {
     FakeApiClient apiClient;
     SearchService service(logger, apiClient);
     std::vector<Team> result = service.searchTeamsByName("Arsenal");
+    EXPECT_FALSE(result.empty());
+}
+
+TEST(SearchServiceTest, SearchTeamsByShortCodeReturnsData) {
+    FakeLogger logger;
+    FakeApiClient apiClient;
+    SearchService service(logger, apiClient);
+    std::vector<Team> result = service.searchTeamsByShortCode("ARS");
     EXPECT_FALSE(result.empty());
 }
