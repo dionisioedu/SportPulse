@@ -2,14 +2,9 @@
 #define TEAM_H
 
 #include <string>
-#include <vector>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
-
-inline std::string getString(const json& item, const std::string& key) {
-    return item.contains(key) && !item[key].is_null() ? item[key].get<std::string>() : "";
-}
 
 struct Team {
     Team();
@@ -144,10 +139,11 @@ struct Team {
     std::string strEquipment;
     std::string strYoutube;
     std::string strLocked;
-};
 
-struct TeamsData {
-    std::vector<Team> teams;
+private:
+    inline std::string getString(const json& item, const std::string& key) {
+        return item.contains(key) && !item[key].is_null() ? item[key].get<std::string>() : "";
+    }
 };
 
 #endif // TEAM_H

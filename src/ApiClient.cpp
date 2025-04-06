@@ -33,7 +33,7 @@ std::string ApiClient::searchPlayers(const std::string playerName) {
     return request("searchplayers.php?p=" + playerName);
 }
 
-std::string ApiClient::searchPlayersByTeam(const std::string teamName) {
+std::string ApiClient::searchPlayersFromTeam(const std::string teamName) {
     return request("searchplayers.php?t=" + teamName);
 }
 

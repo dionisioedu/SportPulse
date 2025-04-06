@@ -19,9 +19,9 @@ TEST(ApiClientTest, SearchPlayersReturnsData) {
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, SearchPlayersByTeamReturnsData) {
+TEST(ApiClientTest, SearchPlayersFromTeamReturnsData) {
     ApiClient client;
-    std::string result = client.searchPlayersByTeam("Arsenal");
+    std::string result = client.searchPlayersFromTeam("Arsenal");
     EXPECT_FALSE(result.empty());
 }
 

@@ -5,7 +5,7 @@ class FakeLogger : public ILogger {
 public:
     std::vector<std::string> logs;
 
-    void log(Level level, const std::string& message) override {}
+    void log(Level level, const std::string &message) override {}
 };
 
 class FakeApiClient : public IApiClient {
@@ -81,17 +81,104 @@ class FakeApiClient : public IApiClient {
           ]
         }
         )";
+
+    std::string searchPlayersData = R"({
+      "player": [
+        {
+          "idPlayer": "34145395",
+          "idTeam": "133619",
+          "strPlayer": "Danny Welbeck",
+          "strTeam": "Brighton",
+          "strSport": "Soccer",
+          "strThumb": "https://www.thesportsdb.com/images/media/player/thumb/82uics1544986067.jpg",
+          "strCutout": "https://www.thesportsdb.com/images/media/player/cutout/pr0quu1725369088.png",
+          "strNationality": "England",
+          "dateBorn": "1990-11-26",
+          "strStatus": "Active",
+          "strGender": "Male",
+          "strPosition": "Centre-Forward",
+          "relevance": "28.061433792114258"
+        },
+        {
+          "idPlayer": "34148370",
+          "idTeam": "135181",
+          "strPlayer": "Mase Nana Addo Welbeck",
+          "strTeam": "_Retired Soccer",
+          "strSport": "Soccer",
+          "strThumb": null,
+          "strCutout": null,
+          "strNationality": "Ghana",
+          "dateBorn": "1994-11-24",
+          "strStatus": null,
+          "strGender": "Male",
+          "strPosition": "Midfielder",
+          "relevance": "20.59086036682129"
+        },
+        {
+          "idPlayer": "34270715",
+          "idTeam": "135181",
+          "strPlayer": "Nana Welbeck",
+          "strTeam": "_Retired-Soccer",
+          "strSport": "Soccer",
+          "strThumb": null,
+          "strCutout": null,
+          "strNationality": "Ghana",
+          "dateBorn": "1994-11-24",
+          "strStatus": "Retired",
+          "strGender": "Male",
+          "strPosition": "Central Midfield",
+          "relevance": "20.59086036682129"
+        },
+        {
+          "idPlayer": "34271394",
+          "idTeam": "135181",
+          "strPlayer": "Richard Boateng Welbeck",
+          "strTeam": "_Retired-Soccer",
+          "strSport": "Soccer",
+          "strThumb": null,
+          "strCutout": null,
+          "strNationality": "Ghana",
+          "dateBorn": "1992-07-10",
+          "strStatus": "Retired",
+          "strGender": "Male",
+          "strPosition": "Central Midfield",
+          "relevance": "20.59086036682129"
+        },
+        {
+          "idPlayer": "34145338",
+          "idTeam": "135181",
+          "strPlayer": "Danny Gabbidon",
+          "strTeam": "_Retired Soccer",
+          "strSport": "Soccer",
+          "strThumb": "https://www.thesportsdb.com/images/media/player/thumb/zns3cf1533756307.jpg",
+          "strCutout": null,
+          "strNationality": "Wales",
+          "dateBorn": "1979-08-08",
+          "strStatus": "Retired",
+          "strGender": "Male",
+          "strPosition": "Defender",
+          "relevance": "7.470573902130127"
+        }
+      ]
+    })";
+
 public:
     std::string searchTeams(const std::string teamName) override {
         return searchTeamsData;
     };
 
     std::string searchTeamsByShortCode(const std::string shortCode) override {
-      return searchTeamsData;
+        return searchTeamsData;
     };
 
-    std::string searchPlayers(const std::string playerName) override { return ""; };
-    std::string searchPlayersByTeam(const std::string teamName) override { return ""; };
+    std::string searchPlayers(const std::string playerName) override {
+        return searchPlayersData;
+    };
+
+    std::string searchPlayersFromTeam(const std::string teamName) override {
+        return searchPlayersData;
+    };
+
     std::string searchEventByName(const std::string eventName) override { return ""; };
     std::string searchEventsByNameAndYear(const std::string eventName, const std::string startYear, const std::string endYear) override { return ""; };
     std::string searchEventByEventFileName(const std::string eventFileName) override { return ""; };
@@ -119,5 +206,21 @@ TEST(SearchServiceTest, SearchTeamsByShortCodeReturnsData) {
     FakeApiClient apiClient;
     SearchService service(logger, apiClient);
     std::vector<Team> result = service.searchTeamsByShortCode("ARS");
+    EXPECT_FALSE(result.empty());
+}
+
+TEST(SearchServiceTest, SearchPlayersReturnsData) {
+    FakeLogger logger;
+    FakeApiClient apiClient;
+    SearchService service(logger, apiClient);
+    std::vector<Player> result = service.searchPlayers("Danny_Welbeck");
+    EXPECT_FALSE(result.empty());
+}
+
+TEST(SearchServiceTest, SearchPlayersFromTeamReturnsData) {
+    FakeLogger logger;
+    FakeApiClient apiClient;
+    SearchService service(logger, apiClient);
+    std::vector<Player> result = service.searchPlayersFromTeam("Arsenal");
     EXPECT_FALSE(result.empty());
 }
