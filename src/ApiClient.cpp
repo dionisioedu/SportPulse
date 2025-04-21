@@ -73,6 +73,14 @@ std::string ApiClient::getLeaguesForCountry(const std::string country, const std
     return request("search_all_leagues.php?c=" + country + "&s=" + sport);
 }
 
+std::string ApiClient::getSeasonsFromLeague(const std::string leagueId) {
+    return request("search_all_seasons.php?id=" + leagueId + "&badge=1");
+}
+
+std::string ApiClient::getLeague(const std::string leagueId) {
+    return request("lookupleague.php?id=" + leagueId);
+}
+
 std::string ApiClient::fetchLiveScores() {
     return request("eventslast.php?id=133602");
 }

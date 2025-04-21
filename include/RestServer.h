@@ -5,7 +5,6 @@
 #include "services/LeagueService.h"
 #include "services/SportService.h"
 #include "services/CountryService.h"
-#include "services/LeagueForCountryService.h"
 #include "services/SearchService.h"
 #include "utils/ILogger.h"
 
@@ -16,7 +15,6 @@ public:
         LeagueService& leagueService,
         SportService& sportService,
         CountryService& countryService,
-        LeagueForCountryService& leagueForCountryService,
         SearchService& searchService,
         ILogger& logger);
 
@@ -28,6 +26,8 @@ private:
     void handleGetSports(web::http::http_request request);
     void handleGetCountries(web::http::http_request request);
     void handleGetLeaguesForCountry(web::http::http_request request);
+    void handleGetLeague(web::http::http_request request);
+
     void handleSearchTeamsByName(web::http::http_request request);
     void handleSearchTeamsByShortCode(web::http::http_request request);
     void handleSearchPlayers(web::http::http_request request);
@@ -41,7 +41,6 @@ private:
     LeagueService& _leagueService;
     SportService& _sportService;
     CountryService& _countryService;
-    LeagueForCountryService& _leagueForCountryService;
     SearchService& _searchService;
     ILogger& _logger;
 };

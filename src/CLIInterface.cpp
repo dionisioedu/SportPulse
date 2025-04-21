@@ -5,13 +5,11 @@ CLIInterface::CLIInterface(
     LeagueService& leagueService,
     SportService& sportService,
     CountryService& countryService,
-    LeagueForCountryService& leagueForCountryService,
     SearchService& searchService,
     ILogger& logger)
     : _leagueService(leagueService),
       _sportService(sportService),
       _countryService(countryService),
-      _leagueForCountryService(leagueForCountryService),
       _searchService(searchService),
       _logger(logger) {}
 
@@ -90,7 +88,7 @@ void CLIInterface::run() {
                 std::getline(std::cin, sport);
 
                 std::cout << "Fetching leagues for country data for " << country << "...\n";
-                auto leagues = _leagueForCountryService.getAllLeaguesForCountry(country, sport);
+                auto leagues = _leagueService.getAllLeaguesForCountry(country, sport);
                 if (!leagues.empty()) {
                     std::cout << "\nLeagues\n";
                     for (const auto& league : leagues) {

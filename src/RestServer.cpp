@@ -18,13 +18,11 @@ RestServer::RestServer(
     LeagueService& leagueService,
     SportService& sportService,
     CountryService& countryService,
-    LeagueForCountryService& leagueForCountryService,
     SearchService& searchService,
     ILogger& logger)
     : _leagueService(leagueService),
       _sportService(sportService),
       _countryService(countryService),
-      _leagueForCountryService(leagueForCountryService),
       _searchService(searchService),
       _logger(logger) {
 
@@ -53,6 +51,8 @@ RestServer::RestServer(
             handleGetCountries(request);
         } else if (path[0] == U("leaguesForCountry")) {
             handleGetLeaguesForCountry(request);
+        } else if (path[0] == U("league")) {
+            handleGetLeague(request);
         } else if (path[0] == U("searchTeamsByName")) {
             handleSearchTeamsByName(request);
         } else if (path[0] == U("searchTeamsByShortCode")) {
@@ -159,7 +159,7 @@ void RestServer::handleGetLeaguesForCountry(web::http::http_request request) {
         sport = utility::conversions::to_utf8string(queries[U("sport")]);
     }
 
-    auto leagues = _leagueForCountryService.getAllLeaguesForCountry(country, sport);
+    auto leagues = _leagueService.getAllLeaguesForCountry(country, sport);
     
     auto jArray = web::json::value::array();
     for (size_t i = 0; i < leagues.size(); ++i) {
@@ -168,6 +168,80 @@ void RestServer::handleGetLeaguesForCountry(web::http::http_request request) {
         jLeague[U("strLeague")] = web::json::value::string(utility::conversions::to_string_t(leagues[i].strLeague));
         jArray[i] = jLeague;
     }
+
+    http_response response(status_codes::OK);
+    addCORSHeaders(response);
+    response.headers().add(U("Content-Type"), U("application/json"));
+    response.set_body(jArray);
+    request.reply(response);
+}
+
+web::json::value toJson(const League& league) {
+    web::json::value jLeague;
+
+    auto str = [](const std::string& s) {
+        return web::json::value::string(utility::conversions::to_string_t(s));
+    };
+
+    jLeague[U("idLeague")] = str(league.idLeague);
+    jLeague[U("idSoccerXML")] = str(league.idSoccerXML);
+    jLeague[U("idAPIfootball")] = str(league.idAPIfootball);
+    jLeague[U("strSport")] = str(league.strSport);
+    jLeague[U("strLeague")] = str(league.strLeague);
+    jLeague[U("strLeagueAlternate")] = str(league.strLeagueAlternate);
+    jLeague[U("intDivision")] = str(league.intDivision);
+    jLeague[U("idCup")] = str(league.idCup);
+    jLeague[U("strCurrentSeason")] = str(league.strCurrentSeason);
+    jLeague[U("intFormedYear")] = str(league.intFormedYear);
+    jLeague[U("dateFirstEvent")] = str(league.dateFirstEvent);
+    jLeague[U("strGender")] = str(league.strGender);
+    jLeague[U("strCountry")] = str(league.strCountry);
+    jLeague[U("strWebsite")] = str(league.strWebsite);
+    jLeague[U("strFacebook")] = str(league.strFacebook);
+    jLeague[U("strInstagram")] = str(league.strInstagram);
+    jLeague[U("strTwitter")] = str(league.strTwitter);
+    jLeague[U("strYoutube")] = str(league.strYoutube);
+    jLeague[U("strRSS")] = str(league.strRSS);
+
+    jLeague[U("strDescriptionEN")] = str(league.strDescriptionEN);
+
+    jLeague[U("strTvRights")] = str(league.strTvRights);
+    jLeague[U("strFanart1")] = str(league.strFanart1);
+    jLeague[U("strFanart2")] = str(league.strFanart2);
+    jLeague[U("strFanart3")] = str(league.strFanart3);
+    jLeague[U("strFanart4")] = str(league.strFanart4);
+    jLeague[U("strBanner")] = str(league.strBanner);
+    jLeague[U("strBadge")] = str(league.strBadge);
+    jLeague[U("strLogo")] = str(league.strLogo);
+    jLeague[U("strPoster")] = str(league.strPoster);
+    jLeague[U("strTrophy")] = str(league.strTrophy);
+
+    jLeague[U("strNaming")] = str(league.strNaming);
+    jLeague[U("strComplete")] = str(league.strComplete);
+    jLeague[U("strLocked")] = str(league.strLocked);
+
+    return jLeague;
+}
+
+void RestServer::handleGetLeague(web::http::http_request request) {
+    auto queries = uri::split_query(request.relative_uri().query());
+    std::string leagueId;
+    if (queries.find(U("id")) != queries.end()) {
+        leagueId = utility::conversions::to_utf8string(queries[U("id")]);
+    }
+
+    if (leagueId.empty()) {
+        http_response errorResponse(status_codes::BadRequest);
+        addCORSHeaders(errorResponse);
+        errorResponse.set_body(U("Error: id parameter is required."));
+        request.reply(errorResponse);
+        return;
+    }
+
+    auto league = _leagueService.getLeague(leagueId);
+
+    web::json::value jArray = web::json::value::array();
+    jArray[0] = toJson(league);
 
     http_response response(status_codes::OK);
     addCORSHeaders(response);

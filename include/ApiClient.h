@@ -26,6 +26,8 @@ public:
     std::string getAllCountries() override;
     std::string getLeaguesForCountry(const std::string country) override;
     std::string getLeaguesForCountry(const std::string country, const std::string sport) override;
+    std::string getSeasonsFromLeague(const std::string leagueId) override;
+    std::string getLeague(const std::string leagueId) override;
 
     std::string fetchLiveScores() override;
 };
