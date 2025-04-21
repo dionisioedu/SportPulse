@@ -5,7 +5,6 @@
 #include "ApiClient.h"
 #include "services/SportService.h"
 #include "services/LeagueService.h"
-#include "services/LeagueForCountryService.h"
 #include "services/CountryService.h"
 #include "services/SearchService.h"
 #include "RestServer.h"
@@ -20,7 +19,6 @@ int main(int argc, char* argv[]) {
     SportService sportService(logger);
     LeagueService leagueService(logger);
     CountryService countryService(logger);
-    LeagueForCountryService leagueForCountryService(logger);
 
     ApiClient apiClient;
     SearchService searchService(logger, apiClient);
@@ -51,7 +49,6 @@ int main(int argc, char* argv[]) {
             leagueService,
             sportService,
             countryService,
-            leagueForCountryService,
             searchService,
             logger);
 
@@ -69,7 +66,6 @@ int main(int argc, char* argv[]) {
             leagueService,
             sportService,
             countryService,
-            leagueForCountryService,
             searchService,
             logger);
 

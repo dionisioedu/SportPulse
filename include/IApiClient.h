@@ -17,6 +17,8 @@ public:
     [[nodiscard]] virtual std::string getAllCountries() = 0;
     [[nodiscard]] virtual std::string getLeaguesForCountry(const std::string country) = 0;
     [[nodiscard]] virtual std::string getLeaguesForCountry(const std::string country, const std::string sport) = 0;
+    [[nodiscard]] virtual std::string getSeasonsFromLeague(const std::string leagueId) = 0;
+    [[nodiscard]] virtual std::string getLeague(const std::string leagueId) = 0;
 
     [[nodiscard]] virtual std::string fetchLiveScores() = 0;
 };

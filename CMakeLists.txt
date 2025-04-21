@@ -15,7 +15,6 @@ add_executable(SportPulse
         src/services/SportService.cpp
         src/services/LeagueService.cpp
         src/services/CountryService.cpp
-        src/services/LeagueForCountryService.cpp
         src/services/SearchService.cpp)
 
 target_link_libraries(SportPulse curl pthread crypto ssl cpprest)
@@ -37,14 +36,12 @@ add_executable(SportPulseTests
         tests/test_sportservice.cpp
         tests/test_leagueservice.cpp
         tests/test_countryservice.cpp
-        tests/test_leagueforcountryservice.cpp
         tests/test_searchservice.cpp
         src/ApiClient.cpp
         src/DataProcessor.cpp
         src/services/SportService.cpp
         src/services/LeagueService.cpp
         src/services/CountryService.cpp
-        src/services/LeagueForCountryService.cpp
         src/services/SearchService.cpp)
 
 target_link_libraries(SportPulseTests gtest_main curl)

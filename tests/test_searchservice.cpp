@@ -395,6 +395,8 @@ public:
     std::string getAllCountries() override { return ""; };
     std::string getLeaguesForCountry(const std::string country) override { return ""; };
     std::string getLeaguesForCountry(const std::string country, const std::string sport) override { return ""; };
+    std::string getSeasonsFromLeague(const std::string leagueId) override { return ""; };
+    std::string getLeague(const std::string leagueId) override { return ""; };
 
     std::string fetchLiveScores() override { return ""; };
 };

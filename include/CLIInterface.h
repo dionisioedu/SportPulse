@@ -5,7 +5,6 @@
 #include "services/LeagueService.h"
 #include "services/SportService.h"
 #include "services/CountryService.h"
-#include "services/LeagueForCountryService.h"
 #include "services/SearchService.h"
 
 class CLIInterface {
@@ -14,7 +13,6 @@ public:
         LeagueService& leagueService,
         SportService& sportService,
         CountryService& countrySerice,
-        LeagueForCountryService& leagueForCountryService,
         SearchService& searchService,
         ILogger& logger);
 
@@ -24,7 +22,6 @@ private:
     LeagueService& _leagueService;
     SportService& _sportService;
     CountryService& _countryService;
-    LeagueForCountryService& _leagueForCountryService;
     SearchService& _searchService;
     ILogger& _logger;
 };

@@ -79,6 +79,18 @@ TEST(ApiClientTest, GetLeaguesForCountryAndSportReturnsData) {
     EXPECT_FALSE(result.empty());
 }
 
+TEST(ApiClientTest, GetSeasonsFromLeague) {
+    ApiClient client;
+    std::string result = client.getSeasonsFromLeague("4328");
+    EXPECT_FALSE(result.empty());
+}
+
+TEST(ApiClientTest, GetLeague) {
+    ApiClient client;
+    auto result = client.getLeague("4396");
+    EXPECT_FALSE(result.empty());
+}
+
 TEST(ApiClientTest, FetchLiveScoresReturnsData) {
     ApiClient client;
     std::string result = client.fetchLiveScores();
