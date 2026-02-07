@@ -1,5 +1,4 @@
-#ifndef REST_SERVER_H
-#define REST_SERVER_H
+#pragma once
 
 #include <cpprest/http_listener.h>
 #include "services/LeagueService.h"
@@ -22,6 +21,13 @@ public:
     void stop();
 
 private:
+    web::http::experimental::listener::http_listener _listener;
+    LeagueService& _leagueService;
+    SportService& _sportService;
+    CountryService& _countryService;
+    SearchService& _searchService;
+    ILogger& _logger;
+
     void handleGetLeagues(web::http::http_request request);
     void handleGetSports(web::http::http_request request);
     void handleGetCountries(web::http::http_request request);
@@ -36,13 +42,4 @@ private:
     void handleSearchEventsByNameAndYear(web::http::http_request request);
     void handleSearchEventByEventFileName(web::http::http_request request);
     void handleSearchForVenue(web::http::http_request request);
-
-    web::http::experimental::listener::http_listener _listener;
-    LeagueService& _leagueService;
-    SportService& _sportService;
-    CountryService& _countryService;
-    SearchService& _searchService;
-    ILogger& _logger;
 };
-
-#endif // REST_SERVER_H

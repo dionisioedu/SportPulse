@@ -1,5 +1,7 @@
 #include "RestServer.h"
 #include <cpprest/json.h>
+#include <unordered_map>
+#include <functional>
 
 using namespace web;
 using namespace web::http;
@@ -26,8 +28,24 @@ RestServer::RestServer(
       _searchService(searchService),
       _logger(logger) {
 
+    std::unordered_map<std::string, std::function<void(RestServer*, web::http::http_request)>> routeHandlers = {
+        { "leagues", &RestServer::handleGetLeagues },
+        { "sports", &RestServer::handleGetSports },
+        { "countries", &RestServer::handleGetCountries },
+        { "leaguesForCountry", &RestServer::handleGetLeaguesForCountry },
+        { "league", &RestServer::handleGetLeague },
+        { "searchTeamsByName", &RestServer::handleSearchTeamsByName },
+        { "searchTeamsByShortCode", &RestServer::handleSearchTeamsByShortCode },
+        { "searchPlayers", &RestServer::handleSearchPlayers },
+        { "searchPlayersFromTeam", &RestServer::handleSearchPlayersFromTeam },
+        { "searchEventByName", &RestServer::handleSearchEventByName },
+        { "searchEventByNameAndYear", &RestServer::handleSearchEventsByNameAndYear },
+        { "searchEventByEventFileName", &RestServer::handleSearchEventByEventFileName },
+        { "searchForVenue", &RestServer::handleSearchForVenue }
+    };
+
     _listener = http_listener(utility::conversions::to_string_t(address));
-    _listener.support(methods::GET, [this](http_request request) {
+    _listener.support(methods::GET, [this, routeHandlers](http_request request) {
         auto path = uri::split_path(uri::decode(request.request_uri().path()));
         if (path.empty() || path[0] == U("api") || (path.size() == 1 && (path[0].empty() || path[0] == U("api")))) {
             // If GET / is requested, return a simple HTML page
@@ -39,38 +57,19 @@ RestServer::RestServer(
                                       "<body>"
                                       "<h1>Welcome to SportPulse API</h1>"
                                       "<p>This is a backend service exposing a REST API for SportPulse.</p>"
+                                      "<p>In development by <a href=https://x.com/dionisiodev>Dionisio</a>.</p>"
                                       "</body>"
                                       "</html>";
             response.set_body(utility::conversions::to_string_t(htmlContent));
             request.reply(response);
-        } else if (path[0] == U("leagues")) {
-            handleGetLeagues(request);
-        } else if (path[0] == U("sports")) {
-            handleGetSports(request);
-        } else if (path[0] == U("countries")) {
-            handleGetCountries(request);
-        } else if (path[0] == U("leaguesForCountry")) {
-            handleGetLeaguesForCountry(request);
-        } else if (path[0] == U("league")) {
-            handleGetLeague(request);
-        } else if (path[0] == U("searchTeamsByName")) {
-            handleSearchTeamsByName(request);
-        } else if (path[0] == U("searchTeamsByShortCode")) {
-            handleSearchTeamsByShortCode(request);
-        } else if (path[0] == U("searchPlayers")) {
-            handleSearchPlayers(request);
-        } else if (path[0] == U("searchPlayersFromTeam")) {
-            handleSearchPlayersFromTeam(request);
-        } else if (path[0] == U("searchEventByName")) {
-            handleSearchEventByName(request);
-        } else if (path[0] == U("searchEventByNameAndYear")) {
-            handleSearchEventsByNameAndYear(request);
-        } else if (path[0] == U("searchEventByEventFileName")) {
-            handleSearchEventByEventFileName(request);
-        } else if (path[0] == U("searchForVenue")) {
-            handleSearchForVenue(request);
         } else {
-            request.reply(status_codes::NotFound);
+            auto handlerIt = routeHandlers.find(utility::conversions::to_utf8string(path[0]));
+            if (handlerIt != routeHandlers.end()) {
+                auto handler = handlerIt->second;
+                handler(this, request);
+            } else {
+                request.reply(status_codes::NotFound);
+            }
         }
     });
 }
