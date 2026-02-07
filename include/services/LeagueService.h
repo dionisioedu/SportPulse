@@ -1,14 +1,14 @@
-#ifndef LEAGUE_SERVICE_H
-#define LEAGUE_SERVICE_H
+#pragma once
 
 #include <string>
 #include <vector>
 #include "utils/ILogger.h"
+#include "IApiClient.h"
 #include "models/League.h"
 
 class LeagueService {
 public:
-    explicit LeagueService(ILogger& logger) : _logger(logger) {}
+    explicit LeagueService(ILogger& logger, IApiClient& apiClient) : _logger(logger), _apiClient(apiClient) {}
 
     [[nodiscard]] std::vector<League> getLeagues();
     [[nodiscard]] std::vector<League> getAllLeaguesForCountry(const std::string country, const std::string sport = "");
@@ -16,6 +16,5 @@ public:
 
 private:
     ILogger& _logger;
+    IApiClient& _apiClient;
 };
-
-#endif // LEAGUE_SERVICE_H

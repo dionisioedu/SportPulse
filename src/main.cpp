@@ -15,14 +15,6 @@ int main(int argc, char* argv[]) {
     Logger logger("sportpulse.log");
     logger.log(ILogger::Level::INFO, "Starting SportPulse");
 
-    // Initialize services with the injected logger
-    SportService sportService(logger);
-    LeagueService leagueService(logger);
-    CountryService countryService(logger);
-
-    TheSportsDbApiClient apiClient;
-    SearchService searchService(logger, apiClient);
-
     // Parse command-line arguments to decide mode: --api, --cli, or both.
     bool runApi = false;
     bool runCli = false;
@@ -38,6 +30,14 @@ int main(int argc, char* argv[]) {
     if (!runApi && !runCli) {
         runApi = true;
     }
+
+    TheSportsDbApiClient apiClient;
+
+    // Initialize services with the injected logger and ApiClient
+    SportService sportService(logger, apiClient);
+    LeagueService leagueService(logger, apiClient);
+    CountryService countryService(logger, apiClient);
+    SearchService searchService(logger, apiClient);
 
     // Pointer to RestServer to control its lifetime.
     RestServer* restServer = nullptr;

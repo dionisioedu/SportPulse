@@ -2,7 +2,6 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 #include "services/LeagueService.h"
-#include "apis/TheSportsDbApiClient.h"
 #include "utils/Cache.h"
 
 using json = nlohmann::json;
@@ -78,8 +77,7 @@ std::vector<League> LeagueService::getLeagues() {
         return cached.value();
     }
 
-    TheSportsDbApiClient client;
-    std::string response = client.getAllLeagues();
+    std::string response = _apiClient.getAllLeagues();
     _logger.log(ILogger::Level::DEBUG, "Response: " + response);
 
     std::vector<League> leagues;
@@ -107,13 +105,12 @@ std::vector<League> LeagueService::getAllLeaguesForCountry(const std::string cou
         return cached.value();
     }
 
-    TheSportsDbApiClient client;
     std::string response;
     
     if (sport == "") {
-        response = client.getLeaguesForCountry(country);
+        response = _apiClient.getLeaguesForCountry(country);
     } else {
-        response = client.getLeaguesForCountry(country, sport);
+        response = _apiClient.getLeaguesForCountry(country, sport);
     }
 
     _logger.log(ILogger::Level::DEBUG, "Response: " + response);
@@ -143,8 +140,7 @@ League LeagueService::getLeague(const std::string leagueId) {
         return cached.value();
     }
 
-    TheSportsDbApiClient client;
-    std::string response = client.getLeague(leagueId);
+    std::string response = _apiClient.getLeague(leagueId);
     _logger.log(ILogger::Level::DEBUG, "Response: " + response);
 
     League league;

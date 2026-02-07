@@ -3,9 +3,7 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include "services/CountryService.h"
-#include "apis/TheSportsDbApiClient.h"
 #include "utils/Cache.h"
-#include "utils/ILogger.h"
 
 using json = nlohmann::json;
 
@@ -18,8 +16,7 @@ std::vector<Country> CountryService::getCountries() {
         return cached.value();
     }
 
-    TheSportsDbApiClient client;
-    std::string response = client.getAllCountries();
+    std::string response = _apiClient.getAllCountries();
     _logger.log(ILogger::Level::DEBUG, "Response: " + response);
 
     std::vector<Country> countries;
