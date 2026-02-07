@@ -1,12 +1,6 @@
 #include <gtest/gtest.h>
 #include "services/LeagueService.h"
-
-class FakeLogger : public ILogger {
-public:
-    std::vector<std::string> logs;
-
-    void log(Level level, const std::string& message) override {}
-};
+#include "FakeLogger.h"
 
 TEST(LeagueServiceTest, GetLeaguesReturnsData) {
     FakeLogger logger;

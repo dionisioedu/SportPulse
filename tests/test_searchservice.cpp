@@ -1,12 +1,6 @@
 #include <gtest/gtest.h>
 #include "services/SearchService.h"
-
-class FakeLogger : public ILogger {
-public:
-    std::vector<std::string> logs;
-
-    void log(Level level, const std::string &message) override {}
-};
+#include "FakeLogger.h"
 
 class FakeApiClient : public IApiClient {
     const std::string searchTeamsData = R"({

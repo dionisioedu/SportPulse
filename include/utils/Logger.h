@@ -23,6 +23,26 @@ public:
             logStream.close();
     }
 
+    void debug(const std::string &message) override {
+        log(Level::DEBUG, message);
+    }
+
+    void info(const std::string &message) override {
+        log(Level::INFO, message);
+    }
+
+    void warning(const std::string &message) override {
+        log(Level::WARNING, message);
+    }
+
+    void error(const std::string &message) override {
+        log(Level::ERROR, message);
+    }
+
+    void fatal(const std::string &message) override {
+        log(Level::FATAL, message);
+    }
+
     void log(Level level, const std::string &message) override {
         std::lock_guard<std::mutex> lock(mutex);
         std::string levelStr;

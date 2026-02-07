@@ -9,7 +9,7 @@ TEST(ApiClientTest, SearchTeamsReturnsData) {
 
 TEST(ApiClientTest, SearchTeamsByShortCodeReturnsData) {
     ApiClient client;
-    std::string result = client.searchTeamsByShortCode("Arsenal");
+    std::string result = client.searchTeamsByShortCode("ARS");
     EXPECT_FALSE(result.empty());
 }
 
