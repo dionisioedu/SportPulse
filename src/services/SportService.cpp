@@ -2,7 +2,7 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 #include "services/SportService.h"
-#include "ApiClient.h"
+#include "apis/TheSportsDbApiClient.h"
 #include "utils/Cache.h"
 
 using json = nlohmann::json;
@@ -16,7 +16,7 @@ std::vector<Sport> SportService::getSports() {
         return cached.value();
     }
 
-    ApiClient client;
+    TheSportsDbApiClient client;
     std::string response = client.getAllSports();
     _logger.log(ILogger::Level::DEBUG, "Response: " + response);
 

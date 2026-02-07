@@ -1,98 +1,98 @@
 #include <gtest/gtest.h>
-#include "ApiClient.h"
+#include "apis/TheSportsDbApiClient.h"
 
-TEST(ApiClientTest, SearchTeamsReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, SearchTeamsReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.searchTeams("Arsenal");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, SearchTeamsByShortCodeReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, SearchTeamsByShortCodeReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.searchTeamsByShortCode("ARS");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, SearchPlayersReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, SearchPlayersReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.searchPlayers("Danny_Welbeck");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, SearchPlayersFromTeamReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, SearchPlayersFromTeamReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.searchPlayersFromTeam("Arsenal");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, SearchEventByNameReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, SearchEventByNameReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.searchEventByName("Arsenal_vs_Chelsea");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, SearchEventByNameAndYearReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, SearchEventByNameAndYearReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.searchEventsByNameAndYear("Arsenal_vs_Chelsea", "2016", "2017");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, SearchEventByEventFileNameReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, SearchEventByEventFileNameReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.searchEventByEventFileName("English_Premier_League_2015-04-26_Arsenal_vs_Chelsea");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, SearchForVenueReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, SearchForVenueReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.searchForVenue("Wembley");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, GetAllSportsReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, GetAllSportsReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.getAllSports();
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, GetAllLeaguesReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, GetAllLeaguesReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.getAllLeagues();
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, GetAllCountriesReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, GetAllCountriesReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.getAllCountries();
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, GetLeaguesForCountryReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, GetLeaguesForCountryReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.getLeaguesForCountry("Brazil");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, GetLeaguesForCountryAndSportReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, GetLeaguesForCountryAndSportReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.getLeaguesForCountry("Brazil", "Soccer");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, GetSeasonsFromLeague) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, GetSeasonsFromLeague) {
+    TheSportsDbApiClient client;
     std::string result = client.getSeasonsFromLeague("4328");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, GetLeague) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, GetLeague) {
+    TheSportsDbApiClient client;
     auto result = client.getLeague("4396");
     EXPECT_FALSE(result.empty());
 }
 
-TEST(ApiClientTest, FetchLiveScoresReturnsData) {
-    ApiClient client;
+TEST(TheSportsDbApiClientTest, FetchLiveScoresReturnsData) {
+    TheSportsDbApiClient client;
     std::string result = client.fetchLiveScores();
     EXPECT_FALSE(result.empty());
 }

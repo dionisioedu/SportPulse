@@ -5,7 +5,7 @@
 #include <vector>
 #include "IApiClient.h"
 
-class ApiClient : public IApiClient {
+class TheSportsDbApiClient : public IApiClient {
 private:
     const std::string apiUrl = "https://www.thesportsdb.com/api/v1/json/3/";
 

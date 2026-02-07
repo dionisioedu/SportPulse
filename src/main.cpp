@@ -2,7 +2,7 @@
 #include <thread>
 #include <chrono>
 #include "CLIInterface.h"
-#include "ApiClient.h"
+#include "apis/TheSportsDbApiClient.h"
 #include "services/SportService.h"
 #include "services/LeagueService.h"
 #include "services/CountryService.h"
@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     LeagueService leagueService(logger);
     CountryService countryService(logger);
 
-    ApiClient apiClient;
+    TheSportsDbApiClient apiClient;
     SearchService searchService(logger, apiClient);
 
     // Parse command-line arguments to decide mode: --api, --cli, or both.
