@@ -15,17 +15,68 @@ namespace {
     }
 }
 
+static int getIntQuery(const uri& u, const utility::string_t& key, int defaultValue) {
+    auto q = uri::split_query(u.query());
+    auto it = q.find(key);
+    if (it == q.end()) return defaultValue;
+    try {
+        return std::stoi(utility::conversions::to_utf8string(it->second));
+    } catch (...) {
+        return defaultValue;
+    }
+}
+
+static long long getLongLongQuery(const uri& u, const utility::string_t& key, long long defaultValue) {
+    auto q = uri::split_query(u.query());
+    auto it = q.find(key);
+    if (it == q.end()) return defaultValue;
+    try {
+        return std::stoll(utility::conversions::to_utf8string(it->second));
+    } catch (...) {
+        return defaultValue;
+    }
+}
+
+static std::string getStringQuery(const uri& u, const utility::string_t& key, const std::string& def) {
+    auto q = uri::split_query(u.query());
+    auto it = q.find(key);
+    if (it == q.end()) return def;
+    return utility::conversions::to_utf8string(it->second);
+}
+
+static json::value postToJson(const Post& p) {
+    json::value j = json::value::object();
+    j[U("id")] = json::value::string(utility::conversions::to_string_t(p.id));
+    j[U("title")] = json::value::string(utility::conversions::to_string_t(p.title));
+    j[U("summary")] = json::value::string(utility::conversions::to_string_t(p.summary));
+    j[U("imageUrl")] = json::value::string(utility::conversions::to_string_t(p.imageUrl));
+    j[U("sourceName")] = json::value::string(utility::conversions::to_string_t(p.sourceName));
+    j[U("sourceUrl")] = json::value::string(utility::conversions::to_string_t(p.sourceUrl));
+    j[U("publishedAt")] = json::value::number(p.publishedAtEpochSec);
+    j[U("updatedAt")] = json::value::number(p.updatedAtEpochSec);
+
+    json::value tags = json::value::array();
+    for (size_t i = 0; i < p.tags.size(); ++i) {
+        tags[i] = json::value::string(utility::conversions::to_string_t(p.tags[i]));
+    }
+    j[U("tags")] = tags;
+
+    return j;
+}
+
 RestServer::RestServer(
     const std::string& address,
     LeagueService& leagueService,
     SportService& sportService,
     CountryService& countryService,
     SearchService& searchService,
+    PostService& postService,
     ILogger& logger)
     : _leagueService(leagueService),
       _sportService(sportService),
       _countryService(countryService),
       _searchService(searchService),
+      _postService(postService),
       _logger(logger) {
 
     std::unordered_map<std::string, std::function<void(RestServer*, web::http::http_request)>> routeHandlers = {
@@ -41,7 +92,9 @@ RestServer::RestServer(
         { "searchEventByName", &RestServer::handleSearchEventByName },
         { "searchEventByNameAndYear", &RestServer::handleSearchEventsByNameAndYear },
         { "searchEventByEventFileName", &RestServer::handleSearchEventByEventFileName },
-        { "searchForVenue", &RestServer::handleSearchForVenue }
+        { "searchForVenue", &RestServer::handleSearchForVenue },
+        { "posts", &RestServer::handleGetPosts },
+        { "postUpdates", &RestServer::handleGetPostUpdates },
     };
 
     _listener = http_listener(utility::conversions::to_string_t(address));
@@ -86,6 +139,53 @@ void RestServer::stop() {
         .close()
         .then([this](){ _logger.log(ILogger::Level::INFO, "Stopping REST server."); })
         .wait();
+}
+
+void RestServer::handleGetPosts(http_request request) {
+    const auto u = request.request_uri();
+    const int limit = getIntQuery(u, U("limit"), 10);
+    const std::string cursor = getStringQuery(u, U("cursor"), "");
+
+    auto [items, nextCursor] = _postService.getPosts(limit, cursor);
+
+    json::value resp = json::value::object();
+    json::value arr = json::value::array();
+
+    for (size_t i = 0; i < items.size(); ++i) {
+        arr[i] = postToJson(items[i]);
+    }
+
+    resp[U("items")] = arr;
+    resp[U("nextCursor")] = json::value::string(utility::conversions::to_string_t(nextCursor));
+    resp[U("serverTime")] = json::value::number(_postService.serverTimeEpochSec());
+
+    http_response r(status_codes::OK);
+    addCORSHeaders(r);
+    r.set_body(resp);
+    request.reply(r);
+}
+
+void RestServer::handleGetPostUpdates(http_request request) {
+    const auto u = request.request_uri();
+    const long long since = getLongLongQuery(u, U("since"), 0);
+    const int limit = getIntQuery(u, U("limit"), 50);
+
+    const auto items = _postService.getUpdates(since, limit);
+
+    json::value resp = json::value::object();
+    json::value arr = json::value::array();
+
+    for (size_t i = 0; i < items.size(); ++i) {
+        arr[i] = postToJson(items[i]);
+    }
+
+    resp[U("items")] = arr;
+    resp[U("serverTime")] = json::value::number(_postService.serverTimeEpochSec());
+
+    http_response r(status_codes::OK);
+    addCORSHeaders(r);
+    r.set_body(resp);
+    request.reply(r);
 }
 
 void RestServer::handleGetLeagues(web::http::http_request request) {

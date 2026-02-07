@@ -5,6 +5,7 @@
 #include "services/SportService.h"
 #include "services/CountryService.h"
 #include "services/SearchService.h"
+#include "services/PostService.h"
 #include "utils/ILogger.h"
 
 class RestServer {
@@ -15,6 +16,7 @@ public:
         SportService& sportService,
         CountryService& countryService,
         SearchService& searchService,
+        PostService& postService,
         ILogger& logger);
 
     void start();
@@ -26,7 +28,11 @@ private:
     SportService& _sportService;
     CountryService& _countryService;
     SearchService& _searchService;
+    PostService& _postService;
     ILogger& _logger;
+
+    void handleGetPosts(web::http::http_request request);
+    void handleGetPostUpdates(web::http::http_request request);
 
     void handleGetLeagues(web::http::http_request request);
     void handleGetSports(web::http::http_request request);

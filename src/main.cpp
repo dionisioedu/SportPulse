@@ -7,6 +7,7 @@
 #include "services/LeagueService.h"
 #include "services/CountryService.h"
 #include "services/SearchService.h"
+#include "services/PostService.h"
 #include "RestServer.h"
 #include "utils/Cache.h"
 #include "utils/Logger.h"
@@ -38,6 +39,7 @@ int main(int argc, char* argv[]) {
     LeagueService leagueService(logger, apiClient);
     CountryService countryService(logger, apiClient);
     SearchService searchService(logger, apiClient);
+    PostService postService(logger);
 
     // Pointer to RestServer to control its lifetime.
     RestServer* restServer = nullptr;
@@ -50,6 +52,7 @@ int main(int argc, char* argv[]) {
             sportService,
             countryService,
             searchService,
+            postService,
             logger);
 
         restThread = std::thread([&]() {

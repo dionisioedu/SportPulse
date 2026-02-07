@@ -15,7 +15,8 @@ add_executable(SportPulse
         src/services/SportService.cpp
         src/services/LeagueService.cpp
         src/services/CountryService.cpp
-        src/services/SearchService.cpp)
+        src/services/SearchService.cpp
+        src/services/PostService.cpp)
 
 target_link_libraries(SportPulse curl pthread crypto ssl cpprest)
 
