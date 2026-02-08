@@ -157,7 +157,7 @@ void RestServer::handleGetPosts(http_request request) {
 
     resp[U("items")] = arr;
     resp[U("nextCursor")] = json::value::string(utility::conversions::to_string_t(nextCursor));
-    resp[U("serverTime")] = json::value::number(_postService.serverTimeEpochSec());
+    resp[U("serverTime")] = json::value::number(static_cast<int64_t>(_postService.serverTimeEpochSec()));
 
     http_response r(status_codes::OK);
     addCORSHeaders(r);
@@ -180,7 +180,7 @@ void RestServer::handleGetPostUpdates(http_request request) {
     }
 
     resp[U("items")] = arr;
-    resp[U("serverTime")] = json::value::number(_postService.serverTimeEpochSec());
+    resp[U("serverTime")] = json::value::number(static_cast<int64_t>(_postService.serverTimeEpochSec()));
 
     http_response r(status_codes::OK);
     addCORSHeaders(r);
