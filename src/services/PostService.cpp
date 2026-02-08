@@ -13,6 +13,10 @@ PostService::PostService(ILogger& logger)
     loadMockPosts();
 }
 
+PostService::~PostService() {
+    stopMockGenerator();
+}
+
 long long PostService::serverTimeEpochSec() const {
     return nowEpochSec();
 }
@@ -25,20 +29,23 @@ void PostService::loadMockPosts() {
     _posts.clear();
     _posts.reserve(10);
 
-    // 10 posts mockados (ordem: mais novo primeiro)
+    // Create 10 initial mock posts (newest first).
+    // IDs: mock-10 ... mock-1
     for (int i = 0; i < 10; ++i) {
         Post p;
-        p.id = "mock-" + std::to_string(10 - i);
+        const int n = 10 - i;
 
-        p.title = "SportPulse Mock Post #" + std::to_string(10 - i);
+        p.id = "mock-" + std::to_string(n);
+
+        p.title = "SportPulse Mock Post #" + std::to_string(n);
         p.summary = "Resumo mockado para integrar o feed no frontend. "
                     "Depois vamos plugar a geração real de notícias e persistência.";
 
-        p.imageUrl = "https://picsum.photos/seed/sportpulse_" + std::to_string(10 - i) + "/800/450";
+        p.imageUrl = "https://picsum.photos/seed/sportpulse_" + std::to_string(n) + "/800/450";
         p.sourceName = "SportPulse Mock";
         p.sourceUrl = "https://sportpulse.today";
 
-        // espalha no tempo: mais novo = base, depois -60s, -120s...
+        // Spread in time: newest = base, then -60s, -120s...
         p.publishedAtEpochSec = base - (i * 60);
         p.updatedAtEpochSec = p.publishedAtEpochSec;
 
@@ -47,9 +54,86 @@ void PostService::loadMockPosts() {
         _posts.push_back(std::move(p));
     }
 
-    // garante ordenação desc por publishedAt
+    // Ensure descending ordering by publishedAt.
     std::sort(_posts.begin(), _posts.end(),
               [](const Post& a, const Post& b) { return a.publishedAtEpochSec > b.publishedAtEpochSec; });
+
+    // After seeding mock-1..mock-10, next generated id should start at 11.
+    _nextMockId.store(11);
+}
+
+Post PostService::makeNextMockPostLocked(long long now) {
+    // This function must be called with _mtx held.
+    const long long idNum = _nextMockId.fetch_add(1);
+
+    Post p;
+    p.id = "mock-" + std::to_string(idNum);
+
+    p.title = "SportPulse Mock Post #" + std::to_string(idNum);
+    p.summary = "This mock post was generated automatically to simulate real-time updates in the UI.";
+
+    // Use a deterministic image seed so each id gets a stable, different image.
+    p.imageUrl = "https://picsum.photos/seed/sportpulse_" + std::to_string(idNum) + "/800/450";
+    p.sourceName = "SportPulse Mock";
+    p.sourceUrl = "https://sportpulse.today";
+
+    p.publishedAtEpochSec = now;
+    p.updatedAtEpochSec = now;
+
+    p.tags = {"mock", "pulse", "sport"};
+
+    return p;
+}
+
+void PostService::startMockGenerator(int intervalMs) {
+    // Clamp interval for safety.
+    if (intervalMs < 500) intervalMs = 500;
+
+    bool expected = false;
+    if (!_mockRunning.compare_exchange_strong(expected, true)) {
+        // Already running.
+        return;
+    }
+
+    _logger.log(ILogger::Level::INFO, "Starting mock post generator.");
+
+    _mockWorker = std::thread([this, intervalMs]() {
+        runMockLoop(intervalMs);
+    });
+}
+
+void PostService::stopMockGenerator() {
+    if (!_mockRunning.exchange(false)) {
+        return; // Not running.
+    }
+
+    _logger.log(ILogger::Level::INFO, "Stopping mock post generator.");
+
+    if (_mockWorker.joinable()) {
+        _mockWorker.join();
+    }
+}
+
+void PostService::runMockLoop(int intervalMs) {
+    while (_mockRunning.load()) {
+        {
+            std::lock_guard<std::mutex> lock(_mtx);
+
+            const long long t = nowEpochSec();
+            Post p = makeNextMockPostLocked(t);
+
+            // Insert at front so it's the newest.
+            _posts.insert(_posts.begin(), std::move(p));
+
+            // Keep memory bounded.
+            constexpr size_t kMaxPosts = 300;
+            if (_posts.size() > kMaxPosts) {
+                _posts.resize(kMaxPosts);
+            }
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(intervalMs));
+    }
 }
 
 std::pair<std::vector<Post>, std::string> PostService::getPosts(int limit, const std::string& cursor) {

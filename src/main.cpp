@@ -41,6 +41,8 @@ int main(int argc, char* argv[]) {
     SearchService searchService(logger, apiClient);
     PostService postService(logger);
 
+    postService.startMockGenerator(5000); // e.g., 1 new post every 5 seconds
+
     // Pointer to RestServer to control its lifetime.
     RestServer* restServer = nullptr;
     std::thread restThread;
