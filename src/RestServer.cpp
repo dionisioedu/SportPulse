@@ -52,8 +52,8 @@ static json::value postToJson(const Post& p) {
     j[U("imageUrl")] = json::value::string(utility::conversions::to_string_t(p.imageUrl));
     j[U("sourceName")] = json::value::string(utility::conversions::to_string_t(p.sourceName));
     j[U("sourceUrl")] = json::value::string(utility::conversions::to_string_t(p.sourceUrl));
-    j[U("publishedAt")] = json::value::number(p.publishedAtEpochSec);
-    j[U("updatedAt")] = json::value::number(p.updatedAtEpochSec);
+    j[U("publishedAt")] = json::value::number(static_cast<int64_t>(p.publishedAtEpochSec));
+    j[U("updatedAt")] = json::value::number(static_cast<int64_t>(p.updatedAtEpochSec));
 
     json::value tags = json::value::array();
     for (size_t i = 0; i < p.tags.size(); ++i) {
